@@ -1,29 +1,45 @@
 import { GetServerSideProps } from "next";
+import { Orbit } from "next/font/google";
 import Image from "next/image";
 
 type Tweet = {
   idx: number;
   USERNAME: string;
+  NICKNAME: string;
   CONTENT: string;
+  DATE: string;
 };
 
+const orbit = Orbit({ weight: "400", subsets: ["latin"] });
+
 const TweetDetail = (tweet: Tweet) => (
-  <>
-    <div className="mt-10 ml-10 flex items-center">
+  <div className={`mx-12 ${orbit.className}`}>
+    <div className="mt-10 flex gap-x-4">
       <p>
         <Image
-          src="https://i.imgur.com/57XOGVX.png"
+          src="https://pbs.twimg.com/profile_images/789790925614481408/HimqUeEp_400x400.jpg"
           className="rounded-full"
           alt="Profile Image"
-          width={100}
-          height={100}
+          width={64}
+          height={64}
           priority
         />
       </p>
-      <p className="ml-12 text-yellow-400">{tweet.USERNAME}</p>
+      <div className="text-d-yellow">
+        <p>{tweet.NICKNAME}</p>
+        <p>@{tweet.USERNAME}</p>
+      </div>
     </div>
-    <p className="ml-48">{tweet.CONTENT}</p>
-  </>
+    <p className="mt-4">{tweet.CONTENT}</p>
+    <p className="mt-6">
+      {`${tweet.DATE.slice(11, 13)}시`}
+      &nbsp;
+      {`${tweet.DATE.slice(14, 16)}분`},&nbsp;
+      {`${tweet.DATE.slice(0, 4)}`}년&nbsp;
+      {`${parseInt(tweet.DATE.slice(5, 7))}월`}&nbsp;
+      {`${tweet.DATE.slice(8, 10)}일`}
+    </p>
+  </div>
 );
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
