@@ -23,7 +23,7 @@ export default async function handler(
     "SELECT * FROM TWEETS WHERE idx=?",
     req.query.tweet_idx,
     (err, rows) => {
-      if (err) res.status(500).json({ name: "oh nos" });
+      if (err) res.status(500).json(err);
       else res.status(200).json(rows);
     }
   );
