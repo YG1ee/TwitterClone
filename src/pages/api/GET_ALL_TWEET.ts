@@ -12,16 +12,23 @@ const options = {
   user: process.env.NEXT_PUBLIC_DB_USER,
   password: process.env.NEXT_PUBLIC_DB_PASSWORD,
   database: process.env.NEXT_PUBLIC_DB_DATABASE,
+  connectionLimit: 50,
 };
-const conn = mysql.createConnection(options);
+const pool = mysql.createPool(options);
 
 export default async function handler(
   _: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  conn.query("SELECT * FROM TWEETS", (err, rows) => {
-    if (err) res.status(500).json({ name: "oh no" });
-    else res.status(200).json(rows);
+  pool.getConnection((err1, conn) => {
+    if (err1) res.status(500).json(err1);
+    else {
+      conn.query("SELECT * FROM TWEETS", (err2, rows) => {
+        if (err2) res.status(500).json(err2);
+        else res.status(200).json(rows);
+      });
+    }
+    conn.release();
   });
 
   // try {

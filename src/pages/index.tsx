@@ -17,12 +17,14 @@ type Tweet = {
 export default function Home({ tweets }: { tweets: Tweet[] }) {
   return (
     <>
-      <nav className={`${orbit.className} sticky top-0`}>
-        <p className="my-4 text-2xl text-center text-d-cyan">트위터 클론코딩</p>
-        <hr className="border border-d-cyan my-4" />
+      <nav className={`${orbit.className} sticky top-0 z-10`}>
+        <p className="py-4 text-2xl text-center text-d-cyan bg-background">
+          트위터 클론코딩
+        </p>
+        <hr className="border border-d-cyan mb-4" />
       </nav>
 
-      <main className={`m-12 ${orbit.className}`}>
+      <main className={`my-8 ${orbit.className}`}>
         {tweets.map((tweet, i, T) => (
           <Fragment key={i}>
             <Link href={`/tweet/${T.length - 1 - i}`}>
@@ -38,13 +40,13 @@ export default function Home({ tweets }: { tweets: Tweet[] }) {
                       priority
                     />
                   </p>
-                  <div className="text-d-yellow">
+                  <div className="text-d-yellow grid">
                     <p>{tweet.NICKNAME}</p>
                     <p>@{tweet.USERNAME}</p>
                   </div>
                 </div>
                 <p className="mt-4">{tweet.CONTENT}</p>
-                <p className="mt-6">
+                <p className="mt-6 text-sm">
                   {`${
                     parseInt(tweet.DATE.slice(11, 13)) === 0
                       ? "오전"
