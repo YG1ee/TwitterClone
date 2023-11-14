@@ -1,35 +1,45 @@
-import { GetServerSideProps } from "next";
-import { Orbit } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
-type Tweet = {
-  idx: number;
-  USERNAME: string;
-  NICKNAME: string;
-  CONTENT: string;
-  DATE: string;
-};
+import { Tweet } from "TW";
 
-const orbit = Orbit({ weight: "400", subsets: ["latin"] });
+const TweetDetail = async ({
+  params: { tid },
+}: {
+  params: { tid: number };
+}) => {
+  const res = await fetch(
+    `http://my-json-server.typicode.com/yg1ee/tweet-shop-db/tweets/${tid}`,
+    { next: { revalidate: 30 } }
+  );
+  const tweet: Tweet = await res.json();
 
-const TweetDetail = (tweet: Tweet) => (
-  <>
-    <nav className={`${orbit.className} sticky top-0`}>
-      <div className="px-12 my-4 flex items-center text-2xl">
-        <Link href="/" className="absolute left-4 p-4">
-          &lt;
-        </Link>
-        <p className="text-2xl text-d-cyan mx-auto">
-          <Link href="/">트위터 클론코딩</Link>
-        </p>
-      </div>
-      <hr className="border border-d-cyan my-4" />
-    </nav>
+  const compareTweet = (t: any): t is Tweet =>
+    "id" in t &&
+    "USERNAME" in t &&
+    "NICKNAME" in t &&
+    "CONTENT" in t &&
+    "DATE" in t;
 
-    <main className={`my-8 ${orbit.className}`}>
-      <div className="p-4">
-        <div className="flex gap-x-4">
+  !compareTweet(tweet) && redirect("/");
+
+  return (
+    <>
+      <nav className="sticky top-0">
+        <div className="px-12 my-4 flex items-center text-2xl">
+          <Link href="/" className="absolute left-8 p-4">
+            &lt;
+          </Link>
+          <p className="text-2xl text-d-cyan mx-auto">
+            <Link href="/">트위터 클론코딩</Link>
+          </p>
+        </div>
+        <hr className="border border-d-cyan my-4" />
+      </nav>
+
+      <div className="mx-12">
+        <div className="mt-10 flex gap-x-4">
           <p>
             <Image
               src="https://pbs.twimg.com/profile_images/789790925614481408/HimqUeEp_400x400.jpg"
@@ -46,7 +56,7 @@ const TweetDetail = (tweet: Tweet) => (
           </div>
         </div>
         <p className="mt-4">{tweet.CONTENT}</p>
-        <p className="mt-6 text-sm">
+        <p className="mt-6">
           {`${
             parseInt(tweet.DATE.slice(11, 13)) === 0
               ? "오전"
@@ -68,18 +78,8 @@ const TweetDetail = (tweet: Tweet) => (
           )}일`}
         </p>
       </div>
-    </main>
-  </>
-);
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const res = await fetch(
-    `http://localhost:7443/api/GET_TWEET/${context.params?.tid}`
-  )
-    .then((r) => r.json())
-    .catch((e) => console.log(e));
-  const tweet = await res;
-  return { props: tweet[0] };
+    </>
+  );
 };
 
 export default TweetDetail;
