@@ -1,5 +1,5 @@
+import { OtherGNB } from "@/app/components/GNB";
 import Image from "next/image";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { Tweet } from "TW";
@@ -24,19 +24,15 @@ const TweetDetail = async ({
 
   !compareTweet(tweet) && redirect("/");
 
+  const 시 = parseInt(tweet.DATE.slice(11, 13) + 9) % 24;
+  const 분 = tweet.DATE.slice(14, 16);
+  const 년 = tweet.DATE.slice(0, 4);
+  const 월 = tweet.DATE.slice(5, 7);
+  const 일 = tweet.DATE.slice(8, 10);
+
   return (
     <>
-      <nav className="sticky top-0">
-        <div className="px-12 my-4 flex items-center text-2xl">
-          <Link href="/" className="absolute left-8 p-4">
-            &lt;
-          </Link>
-          <p className="text-2xl text-d-cyan mx-auto">
-            <Link href="/">트위터 클론코딩</Link>
-          </p>
-        </div>
-        <hr className="border border-d-cyan my-4" />
-      </nav>
+      <OtherGNB />
 
       <div className="mx-12">
         <div className="mt-10 flex gap-x-4">
@@ -57,25 +53,9 @@ const TweetDetail = async ({
         </div>
         <p className="mt-4">{tweet.CONTENT}</p>
         <p className="mt-6">
-          {`${
-            parseInt(tweet.DATE.slice(11, 13)) === 0
-              ? "오전"
-              : parseInt(tweet.DATE.slice(11, 13)) >= 12
-              ? "오후"
-              : "오전"
-          } ${
-            parseInt(tweet.DATE.slice(11, 13)) === 0
-              ? 12
-              : parseInt(tweet.DATE.slice(11, 13)) > 12
-              ? parseInt(tweet.DATE.slice(11, 13)) - 12
-              : parseInt(tweet.DATE.slice(11, 13))
-          }시 ${tweet.DATE.slice(14, 16)}분, ${`${tweet.DATE.slice(
-            0,
-            4
-          )}`}년 ${parseInt(tweet.DATE.slice(5, 7))}월 ${tweet.DATE.slice(
-            8,
-            10
-          )}일`}
+          {`${시 >= 12 ? "오후" : "오전"} ${
+            시 === 0 ? 12 : 시 > 12 ? 시 - 12 : 시
+          }시 ${분}분, ${년}년 ${월}월 ${일}일`}
         </p>
       </div>
     </>
