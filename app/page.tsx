@@ -1,8 +1,8 @@
 import Image from 'next/image';
-import Link from 'next/link';
 import { Fragment } from 'react';
 
-import { HomeGNB } from './components/GNB';
+import { HomeGNB } from '@components/GNB';
+import { MyLink } from '@components/MyLink';
 import { getTweets } from '@utils/actions';
 
 export default async function Home() {
@@ -12,11 +12,11 @@ export default async function Home() {
     <>
       <HomeGNB />
 
-      <main className="m-12 rounded overflow-clip">
+      <main className="m-12 rounded overflow-clip max-w-2xl mx-auto">
         <p className="text-center">
           {error && '트윗을 가져오는 중 오류가 발생했습니다.'}
         </p>
-        {tweets?.map((tweet, i, T) => {
+        {tweets?.map((tweet, i) => {
           const 시 = parseInt(tweet.created_at.slice(11, 13) + 9) % 24;
           const 분 = tweet.created_at.slice(14, 16);
           const 년 = tweet.created_at.slice(0, 4);
@@ -24,8 +24,8 @@ export default async function Home() {
           const 일 = tweet.created_at.slice(8, 10);
 
           return (
-            <Fragment key={i}>
-              <Link href={`/tweet/${T.length - i}`} scroll={false}>
+            <Fragment key={tweet.id}>
+              <MyLink href={`/tweet/${tweet.id}`}>
                 <div className="p-4 hover:bg-current-line transition-colors duration-300">
                   <div className="flex gap-x-4">
                     <p>
@@ -53,7 +53,7 @@ export default async function Home() {
                     }시 ${분}분, ${년}년 ${월}월 ${일}일`}
                   </p>
                 </div>
-              </Link>
+              </MyLink>
               {i !== tweets.length - 1 && <hr className="border-comment" />}
             </Fragment>
           );

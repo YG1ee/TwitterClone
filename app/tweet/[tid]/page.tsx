@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import type { Tables } from 'supabase';
+import { OtherGNB } from '@components/GNB';
 import { getTweet } from '@utils/actions';
-import { OtherGNB } from '@/components/GNB';
 
 const Existing = ({ tweet }: { tweet: Tables<'tweets'> }) => {
   const 시 = parseInt(tweet.created_at.slice(11, 13) + 9) % 24;
@@ -10,7 +10,7 @@ const Existing = ({ tweet }: { tweet: Tables<'tweets'> }) => {
   const 월 = tweet.created_at.slice(5, 7);
   const 일 = tweet.created_at.slice(8, 10);
   return (
-    <div className="mx-12">
+    <div className="max-w-2xl mx-auto">
       <div className="mt-10 flex gap-x-4">
         <p>
           <Image

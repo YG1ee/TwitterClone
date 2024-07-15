@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { MyLink } from './MyLink';
 
 const HomeGNB = () => (
   <nav className="sticky top-0 bg-background">
@@ -10,13 +10,11 @@ const HomeGNB = () => (
 const OtherGNB = () => (
   <nav className="sticky top-0 bg-background">
     <div className="px-12 py-4 flex items-center text-2xl">
-      <Link href="/" scroll={false} className="absolute left-8 p-4">
+      <MyLink href="/" className="absolute left-8 p-4">
         &lt;
-      </Link>
+      </MyLink>
       <p className="text-2xl text-d-cyan mx-auto">
-        <Link href="/" scroll={false}>
-          트위터 클론코딩
-        </Link>
+        <MyLink href="/">트위터 클론코딩</MyLink>
       </p>
     </div>
     <hr className="border border-d-cyan" />
