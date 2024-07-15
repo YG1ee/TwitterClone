@@ -2,6 +2,7 @@ import Image from 'next/image';
 import type { Tables } from 'supabase';
 import { OtherGNB } from '@components/GNB';
 import { getTweet } from '@utils/actions';
+import { DEFAULT_PIC } from '@utils/env';
 
 const Existing = ({ tweet }: { tweet: Tables<'tweets'> }) => {
   const 시 = parseInt(tweet.created_at.slice(11, 13) + 9) % 24;
@@ -14,10 +15,7 @@ const Existing = ({ tweet }: { tweet: Tables<'tweets'> }) => {
       <div className="mt-10 flex gap-x-4">
         <p>
           <Image
-            src={
-              tweet.profile_img ||
-              'https://pyxis.nymag.com/v1/imgs/69f/cd7/263927bbe11de1db6477dd1ae48ae6d968-01-twitter-egg.rsquare.w330.jpg'
-            }
+            src={tweet.profile_img || DEFAULT_PIC}
             className="rounded-full"
             alt="Profile Image"
             width={64}
