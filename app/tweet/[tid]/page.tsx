@@ -5,11 +5,13 @@ import { getTweet } from '@utils/actions';
 import { DEFAULT_PIC } from '@utils/env';
 
 const Existing = ({ tweet }: { tweet: Tables<'tweets'> }) => {
-  const 시 = parseInt(tweet.created_at.slice(11, 13) + 9) % 24;
-  const 분 = tweet.created_at.slice(14, 16);
-  const 년 = tweet.created_at.slice(0, 4);
-  const 월 = tweet.created_at.slice(5, 7);
-  const 일 = tweet.created_at.slice(8, 10);
+  const d = new Date(tweet.created_at);
+
+  const 시 = d.getHours().toString().padStart(2, '0');
+  const 분 = d.getMinutes().toString().padStart(2, '0');
+  const 년 = d.getFullYear();
+  const 월 = (d.getMonth() + 1).toString().padStart(2, '0');
+  const 일 = d.getDate().toFixed().padStart(2, '0');
   return (
     <div className="max-w-2xl mx-auto">
       <div className="mt-10 flex gap-x-4">
@@ -30,8 +32,10 @@ const Existing = ({ tweet }: { tweet: Tables<'tweets'> }) => {
       </div>
       <p className="mt-4">{tweet.content}</p>
       <p className="mt-6">
-        {`${시 >= 12 ? '오후' : '오전'} ${
-          시 === 0 ? 12 : 시 > 12 ? 시 - 12 : 시
+        {`${parseInt(시) >= 12 ? '오후' : '오전'} ${
+          [parseInt(시)].map((시) =>
+            시 === 0 ? 12 : 시 > 12 ? 시 - 12 : 시
+          )[0]
         }시 ${분}분, ${년}년 ${월}월 ${일}일`}
       </p>
     </div>
